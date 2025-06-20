@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent; // Keep this import, it's good practice
+import java.awt.event.ActionListener; // Keep this import, it's good practice
 
 public class SettingsPanel extends JPanel {
     // Consistent color palette
@@ -14,6 +16,9 @@ public class SettingsPanel extends JPanel {
     private Font titleFont = new Font("Monospaced", Font.BOLD, 36);
     private Font labelFont = new Font("Dialog", Font.BOLD, 18);
     private Font buttonFont = new Font("Dialog", Font.BOLD, 18);
+
+    // Keep references to components that need to be updated or debugged
+    private JComboBox<Integer> boardSizeBox;
 
     public SettingsPanel(TicTacToeApp app) {
         setLayout(new BorderLayout(0, 0));
@@ -35,18 +40,21 @@ public class SettingsPanel extends JPanel {
                 BorderFactory.createLineBorder(NEON_PINK, 2),
                 BorderFactory.createEmptyBorder(30, 40, 30, 40)
         ));
-        card.setMaximumSize(new Dimension(400, 400)); // Prevent oversized panel
+        // Removed setMaximumSize to allow layout manager more freedom,
+        // especially for combo box dropdowns.
+        // card.setMaximumSize(new Dimension(400, 400)); // Consider removing this if still having issues
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 0, 10, 0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
-        gbc.weightx = 1;
+        gbc.weightx = 1; // Allows components to stretch horizontally
 
         // Game Mode
         JLabel modeLabel = new JLabel("Game Mode:");
         modeLabel.setFont(labelFont);
         modeLabel.setForeground(PIXEL_WHITE);
+        // gbc.gridy = 0; // Explicitly set gridy for the first component
         card.add(modeLabel, gbc);
 
         gbc.gridy = 1;
@@ -65,12 +73,17 @@ public class SettingsPanel extends JPanel {
         card.add(boardSizeLabel, gbc);
 
         gbc.gridy = 3;
-        JComboBox<Integer> boardSizeBox = new JComboBox<>();
+        boardSizeBox = new JComboBox<>(); // Initialized here for class-level access
         for (int i = 3; i <= 6; i++) boardSizeBox.addItem(i);
         boardSizeBox.setFont(labelFont);
         boardSizeBox.setBackground(BACKGROUND_DARK);
         boardSizeBox.setForeground(PIXEL_WHITE);
         boardSizeBox.setBorder(BorderFactory.createLineBorder(NEON_BLUE, 1));
+        // --- PROPOSED FIX: Set preferred size and ensure UI is valid ---
+        boardSizeBox.setPreferredSize(new Dimension(150, 30)); // Give it a fixed preferred size
+        boardSizeBox.setMinimumSize(new Dimension(150, 30)); // Set minimum size too
+        boardSizeBox.setMaximumSize(new Dimension(150, 30)); // Set maximum size to prevent excessive growth
+        // --- END PROPOSED FIX ---
         card.add(boardSizeBox, gbc);
 
         // Music checkbox
@@ -112,12 +125,34 @@ public class SettingsPanel extends JPanel {
         boardSizeBox.setSelectedItem(settings.getBoardSize());
         musicCheck.setSelected(settings.isMusicEnabled());
 
+        // --- PROPOSED FIX: Add an ItemListener to force repaint on selection ---
+        boardSizeBox.addItemListener(e -> {
+            // This is primarily for debugging/visual confirmation.
+            // The value is already handled by applyBtn, but this helps visual update.
+            if (e.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+                System.out.println("Board Size selected (visually): " + e.getItem());
+                // Force repaint of the combo box itself
+                boardSizeBox.revalidate();
+                boardSizeBox.repaint();
+                // You might even need to revalidate/repaint its parent if issues persist
+                card.revalidate();
+                card.repaint();
+            }
+        });
+        // --- END PROPOSED FIX ---
+
+
         // Button actions
         applyBtn.addActionListener(e -> {
             settings.setMode((String) modeBox.getSelectedItem());
             settings.setBoardSize((Integer) boardSizeBox.getSelectedItem());
             settings.setMusicEnabled(musicCheck.isSelected());
-            JOptionPane.showMessageDialog(this, "Settings applied!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            settings.saveSettings(); // Make sure settings are saved here!
+            JOptionPane.showMessageDialog(this, "Settings applied! Board size will update on next game start.", "Info", JOptionPane.INFORMATION_MESSAGE);
+            // After applying settings, force a re-render of the combo box just in case
+            boardSizeBox.setSelectedItem(settings.getBoardSize()); // Re-set to confirm it's showing the saved value
+            boardSizeBox.revalidate();
+            boardSizeBox.repaint();
         });
 
         backBtn.addActionListener(e -> {
