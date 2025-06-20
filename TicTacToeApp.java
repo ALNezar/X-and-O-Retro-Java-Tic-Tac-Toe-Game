@@ -11,7 +11,6 @@ public class TicTacToeApp extends JFrame {
 
     public TicTacToeApp() {
         initUI();
-        loadMusic();
         setVisible(true);
     }
 
@@ -33,22 +32,7 @@ public class TicTacToeApp extends JFrame {
         cardLayout.show(mainPanel, name);
     }
 
-    private void loadMusic() {
-        try {
-            File musicFile = new File("background.wav");
-            if (musicFile.exists()) {
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(musicFile);
-                clip = AudioSystem.getClip();
-                clip.open(audioStream);
-                if (settings.isMusicEnabled()) {
-                    clip.start();
-                    clip.loop(Clip.LOOP_CONTINUOUSLY);
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Failed to load background music: " + e.getMessage());
-        }
-    }
+
 
     public Settings getSettings() {
         return settings;

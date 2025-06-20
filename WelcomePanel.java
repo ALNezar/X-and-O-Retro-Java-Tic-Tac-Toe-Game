@@ -3,6 +3,13 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Random;
+import java.io.File; // Required for loading audio files
+import java.io.IOException; // Required for audio file operations
+import javax.sound.sampled.AudioInputStream; // Required for audio file operations
+import javax.sound.sampled.AudioSystem; // Required for audio file operations
+import javax.sound.sampled.Clip; // Required for playing short audio clips
+import javax.sound.sampled.LineUnavailableException; // Exception for audio line issues
+import javax.sound.sampled.UnsupportedAudioFileException; // Exception for unsupported audio formats
 
 public class WelcomePanel extends JPanel {
     // Balatro-inspired color palette, consistent with GamePanel
@@ -25,9 +32,14 @@ public class WelcomePanel extends JPanel {
     private final Random random = new Random();
     private final Point2D.Float[] starfield;
 
+    // Audio clips for sound effects
+    private Clip hoverSoundClip;
+    private Clip clickSoundClip;
+
     public WelcomePanel(TicTacToeApp app) {
         initializeFonts();
         this.starfield = createStarfield(400); // Generate star positions once
+        loadSoundClips(); // Load audio files at initialization
 
         setupMainLayout();
         setupUI(app);
@@ -41,10 +53,52 @@ public class WelcomePanel extends JPanel {
             buttonFont = new Font("Dialog", Font.BOLD, 18);
             footerFont = new Font("Monospaced", Font.PLAIN, 12);
         } catch (Exception e) {
-            // Fallback fonts
+            // Fallback fonts if custom font loading fails (e.g., font file not found)
             titleFont = new Font(Font.MONOSPACED, Font.BOLD, 36);
             buttonFont = new Font(Font.DIALOG, Font.BOLD, 18);
             footerFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+        }
+    }
+
+    /**
+     * Loads the audio files into Clip objects. These clips can then be
+     * played on demand. Error handling is included to catch issues
+     * with file loading or unsupported audio formats.
+     */
+    private void loadSoundClips() {
+        try {
+            // Load hover sound (resources/button.wav)
+            File hoverFile = new File("resources/button.wav");
+            if (hoverFile.exists()) {
+                AudioInputStream hoverAudioStream = AudioSystem.getAudioInputStream(hoverFile);
+                hoverSoundClip = AudioSystem.getClip();
+                hoverSoundClip.open(hoverAudioStream);
+            } else {
+                System.err.println("Hover sound file not found: " + hoverFile.getAbsolutePath());
+            }
+
+            // Load click sound (resources/generic1.wav)
+            File clickFile = new File("resources/generic1.wav");
+            if (clickFile.exists()) {
+                AudioInputStream clickAudioStream = AudioSystem.getAudioInputStream(clickFile);
+                clickSoundClip = AudioSystem.getClip();
+                clickSoundClip.open(clickAudioStream);
+            } else {
+                System.err.println("Click sound file not found: " + clickFile.getAbsolutePath());
+            }
+
+        } catch (UnsupportedAudioFileException e) {
+            System.err.println("Unsupported audio file format: " + e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("I/O Error loading sound file: " + e.getMessage());
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            System.err.println("Audio line unavailable for sound playback: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred while loading sounds: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -106,6 +160,12 @@ public class WelcomePanel extends JPanel {
         // Play Button
         JButton playButton = createStyledButton("PLAY GAME", NEON_PINK);
         playButton.addActionListener(e -> {
+            // Play click sound when button is activated
+            if (clickSoundClip != null) {
+                clickSoundClip.stop(); // Stop if already playing
+                clickSoundClip.setFramePosition(0); // Rewind to start
+                clickSoundClip.start(); // Play the sound
+            }
             stopAnimation();
             app.showScreen("Game");
         });
@@ -117,6 +177,12 @@ public class WelcomePanel extends JPanel {
         // Settings Button
         JButton settingsButton = createStyledButton("SETTINGS", RETRO_PURPLE);
         settingsButton.addActionListener(e -> {
+            // Play click sound when button is activated
+            if (clickSoundClip != null) {
+                clickSoundClip.stop(); // Stop if already playing
+                clickSoundClip.setFramePosition(0); // Rewind to start
+                clickSoundClip.start(); // Play the sound
+            }
             stopAnimation();
             app.showScreen("Settings");
         });
@@ -151,11 +217,17 @@ public class WelcomePanel extends JPanel {
                 BorderFactory.createEmptyBorder(12, 40, 12, 40)
         ));
 
-        // Add consistent hover effects
+        // Add consistent hover effects and sound
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 button.setBackground(accentColor.darker());
+                // Play hover sound
+                if (hoverSoundClip != null) {
+                    hoverSoundClip.stop(); // Stop if already playing
+                    hoverSoundClip.setFramePosition(0); // Rewind to start
+                    hoverSoundClip.start(); // Play the sound
+                }
             }
 
             @Override

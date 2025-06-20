@@ -1,5 +1,3 @@
-import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,8 +8,14 @@ import java.util.List;
 import java.util.Random;
 import javax.sound.sampled.*;
 
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.border.Border; // This was already in your original code
+import javax.swing.BorderFactory;
+import javax.swing.Timer;
+import javax.sound.sampled.FloatControl; // This was added for volume control
 public class GamePanel extends JPanel {
-    // Balatro-inspired color palette
     private static final Color BACKGROUND_DARK = new Color(15, 12, 28);
     private static final Color CARD_BACKGROUND = new Color(33, 29, 55);
     private static final Color NEON_BLUE = new Color(0, 255, 255);
@@ -22,7 +26,6 @@ public class GamePanel extends JPanel {
     private static final Color PIXEL_WHITE = new Color(255, 255, 255);
     private static final Color RETRO_PURPLE = new Color(138, 43, 226);
 
-    // Custom fonts for retro feel
     private Font pixelFont;
     private Font headerFont;
     private Font buttonFont;
@@ -30,9 +33,8 @@ public class GamePanel extends JPanel {
     private JButton[][] buttons;
     private boolean playerX = true;
     private JLabel statusLabel;
-    private final int size = 3; // Hardcoded 3x3 as requested
+    private final int size = 3;
 
-    // Enhanced game statistics with Balatro styling
     private int spotsTaken = 0;
     private JLabel spotsTakenLabel;
     private int humanWins = 0;
@@ -44,12 +46,10 @@ public class GamePanel extends JPanel {
     private int secondsElapsed = 0;
     private JLabel timerLabel;
 
-    // Music controls
     private Clip backgroundMusicClip;
     private JButton musicToggleButton;
     private boolean musicMuted = false;
 
-    // Add restart button field
     private JButton restartButton;
 
     public GamePanel(TicTacToeApp app) {
@@ -57,35 +57,20 @@ public class GamePanel extends JPanel {
         setupMainLayout();
         setupTopPanel(app);
         setupGameBoard(app);
-        setupBottomPanel(); // New method for the bottom panel
+        setupBottomPanel();
         setupStyling();
 
-        // Call resetGame to initialize the game state and timer
         resetGame();
-        // Ensure you have a valid path for your music file here
-        // As it's June 2025, you might be testing specific music files.
-        playBackgroundMusic("path/to/your/music.wav");
+        playBackgroundMusic("resources/music.wav");
     }
 
     private void initializeFonts() {
         try {
-            // Using system default fonts as placeholders for demonstration
-            // If you have custom font files, load them like this:
-            // pixelFont = Font.createFont(Font.TRUETYPE_FONT, new File("path/to/your/pixel_font.ttf")).deriveFont(14f);
-            // headerFont = Font.createFont(Font.TRUETYPE_FONT, new File("path/to/your/header_font.ttf")).deriveFont(16f);
-            // buttonFont = Font.createFont(Font.TRUETYPE_FONT, new File("path/to/your/button_font.ttf")).deriveFont(28f);
-            // GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            // ge.registerFont(pixelFont);
-            // ge.registerFont(headerFont);
-            // ge.registerFont(buttonFont);
-
-            // Fallback fonts
             pixelFont = new Font(Font.MONOSPACED, Font.BOLD, 14);
             headerFont = new Font(Font.DIALOG, Font.BOLD, 16);
             buttonFont = new Font(Font.DIALOG, Font.BOLD, 28);
-        } catch (Exception e) { // Catching FontFormatException | IOException if loading from files
+        } catch (Exception e) {
             System.err.println("Error loading custom fonts (using fallback): " + e.getMessage());
-            // Fallback fonts
             pixelFont = new Font(Font.MONOSPACED, Font.BOLD, 14);
             headerFont = new Font(Font.DIALOG, Font.BOLD, 16);
             buttonFont = new Font(Font.DIALOG, Font.BOLD, 28);
@@ -102,11 +87,9 @@ public class GamePanel extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout(10, 0));
         topPanel.setBackground(BACKGROUND_DARK);
 
-        // Game statistics panel with Balatro-style cards
         JPanel statsPanel = createStatsPanel();
         topPanel.add(statsPanel, BorderLayout.CENTER);
 
-        // Control buttons panel (now only Home and Music)
         JPanel controlPanel = createControlPanel(app);
         topPanel.add(controlPanel, BorderLayout.EAST);
 
@@ -117,23 +100,18 @@ public class GamePanel extends JPanel {
         JPanel statsPanel = new JPanel(new GridLayout(1, 5, 8, 0));
         statsPanel.setBackground(BACKGROUND_DARK);
 
-        // Status card - Initialized here, updated in resetGame
         statusLabel = createStatCard("X's Turn", NEON_BLUE);
         statsPanel.add(statusLabel);
 
-        // Timer card - Initialized here, updated in resetGame
         timerLabel = createStatCard("\u23F1 0s", NEON_GREEN);
         statsPanel.add(timerLabel);
 
-        // Spots taken card - Initialized here, updated in resetGame
         spotsTakenLabel = createStatCard("\u25A0 0/9", NEON_YELLOW);
         statsPanel.add(spotsTakenLabel);
 
-        // Human wins card
         humanWinsLabel = createStatCard("\u2605 0", NEON_PINK);
         statsPanel.add(humanWinsLabel);
 
-        // Bot wins card
         botWinsLabel = createStatCard("\u2699 0", NEON_ORANGE);
         statsPanel.add(botWinsLabel);
 
@@ -147,7 +125,6 @@ public class GamePanel extends JPanel {
         card.setOpaque(true);
         card.setBackground(CARD_BACKGROUND);
 
-        // Create neon-style border
         Border innerBorder = BorderFactory.createLineBorder(accentColor, 2);
         Border outerBorder = BorderFactory.createEmptyBorder(5, 8, 5, 8);
         card.setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
@@ -159,7 +136,6 @@ public class GamePanel extends JPanel {
         JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
         controlPanel.setBackground(BACKGROUND_DARK);
 
-        // Home button
         JButton homeButton = createStyledButton("HOME", RETRO_PURPLE);
         homeButton.addActionListener(e -> {
             stopGameTimer();
@@ -168,7 +144,6 @@ public class GamePanel extends JPanel {
         });
         controlPanel.add(homeButton);
 
-        // Music toggle button
         musicToggleButton = createStyledButton("\u266B", NEON_PINK);
         musicToggleButton.addActionListener(e -> toggleMusic());
         controlPanel.add(musicToggleButton);
@@ -177,11 +152,10 @@ public class GamePanel extends JPanel {
     }
 
     private void setupBottomPanel() {
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10)); // Centered, some vertical gap
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
         bottomPanel.setBackground(BACKGROUND_DARK);
 
-        // Restart button - now in the bottom panel
-        restartButton = createStyledButton("RESTART GAME", NEON_GREEN); // Slightly more descriptive text
+        restartButton = createStyledButton("RESTART GAME", NEON_GREEN);
         restartButton.addActionListener(e -> resetGame());
         bottomPanel.add(restartButton);
 
@@ -201,7 +175,6 @@ public class GamePanel extends JPanel {
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Hover effects
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -221,14 +194,12 @@ public class GamePanel extends JPanel {
         JPanel boardContainer = new JPanel(new BorderLayout());
         boardContainer.setBackground(BACKGROUND_DARK);
 
-        // Title for the game board
         JLabel boardTitle = new JLabel("Tic-tac-toe", JLabel.CENTER);
         boardTitle.setFont(new Font("Dialog", Font.BOLD, 24));
         boardTitle.setForeground(NEON_BLUE);
         boardTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 15, 0));
         boardContainer.add(boardTitle, BorderLayout.NORTH);
 
-        // Game board with enhanced styling
         JPanel boardPanel = new JPanel(new GridLayout(size, size, 3, 3));
         boardPanel.setBackground(BACKGROUND_DARK);
         boardPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -264,7 +235,6 @@ public class GamePanel extends JPanel {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setPreferredSize(new Dimension(120, 120));
 
-        // Enhanced hover effects
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -293,7 +263,6 @@ public class GamePanel extends JPanel {
     }
 
     private void setupStyling() {
-        // Apply additional styling to the main panel
         setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(NEON_BLUE, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
@@ -301,10 +270,10 @@ public class GamePanel extends JPanel {
     }
 
     private void startGameTimer() {
-        secondsElapsed = 0; // Ensure timer starts from 0 on game start/restart
+        secondsElapsed = 0;
         updateTimerDisplay();
         if (gameTimer != null) {
-            gameTimer.stop(); // Stop any existing timer
+            gameTimer.stop();
         }
         gameTimer = new Timer(1000, e -> {
             secondsElapsed++;
@@ -329,12 +298,16 @@ public class GamePanel extends JPanel {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
             backgroundMusicClip = AudioSystem.getClip();
             backgroundMusicClip.open(audioStream);
+
+            FloatControl gainControl = (FloatControl) backgroundMusicClip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-10.0f);
+
             backgroundMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
-            musicToggleButton.setText("\u266A"); // Music playing symbol
+            musicToggleButton.setText("\u266A");
             musicMuted = false;
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            System.err.println("Synthwave beats unavailable: " + e.getMessage());
-            musicToggleButton.setEnabled(false); // Disable button if music can't load
+            System.err.println("MUSIC NOT WORKING " + e.getMessage());
+            musicToggleButton.setEnabled(false);
         }
     }
 
@@ -351,11 +324,11 @@ public class GamePanel extends JPanel {
         if (musicMuted) {
             backgroundMusicClip.start();
             backgroundMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
-            musicToggleButton.setText("\u266A"); // Music playing symbol
+            musicToggleButton.setText("\u266A");
             musicMuted = false;
         } else {
             backgroundMusicClip.stop();
-            musicToggleButton.setText("\u266B"); // Music muted symbol
+            musicToggleButton.setText("\u266B");
             musicMuted = true;
         }
     }
@@ -366,7 +339,6 @@ public class GamePanel extends JPanel {
         String symbol = playerX ? "X" : "O";
         buttons[i][j].setText(symbol);
 
-        // Style the move with player-specific colors
         if (playerX) {
             buttons[i][j].setForeground(NEON_BLUE);
             buttons[i][j].setBorder(BorderFactory.createCompoundBorder(
@@ -435,17 +407,14 @@ public class GamePanel extends JPanel {
     }
 
     private boolean checkWin(String symbol) {
-        // Check rows
         for (int i = 0; i < size; i++) {
             if (checkRow(i, symbol)) return true;
         }
 
-        // Check columns
         for (int j = 0; j < size; j++) {
             if (checkColumn(j, symbol)) return true;
         }
 
-        // Check diagonals
         return checkDiagonals(symbol);
     }
 
@@ -487,30 +456,26 @@ public class GamePanel extends JPanel {
     }
 
     public void resetGame() {
-        // Reset board buttons to initial state
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 buttons[i][j].setText("");
                 buttons[i][j].setEnabled(true);
                 buttons[i][j].setBackground(CARD_BACKGROUND);
-                buttons[i][j].setForeground(PIXEL_WHITE); // Default text color
+                buttons[i][j].setForeground(PIXEL_WHITE);
                 buttons[i][j].setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(RETRO_PURPLE, 2),
                         BorderFactory.createEmptyBorder(10, 10, 10, 10)
                 ));
             }
         }
-        // Reset game state variables
         playerX = true;
         spotsTaken = 0;
 
-        // Update display labels
         statusLabel.setText("X's Turn");
         statusLabel.setForeground(NEON_BLUE);
         spotsTakenLabel.setText("\u25A0 0/9");
 
-        // Reset timer
-        stopGameTimer(); // Stop any currently running timer
-        startGameTimer(); // Start a fresh timer from 0
+        stopGameTimer();
+        startGameTimer();
     }
 }
