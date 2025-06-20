@@ -29,7 +29,7 @@ public class GamePanel extends JPanel {
 
     private JButton[][] buttons;
     private boolean playerX = true;
-    private JLabel statusLabel; // Removed final to allow initialization in createStatsPanel
+    private JLabel statusLabel;
     private final int size = 3; // Hardcoded 3x3 as requested
 
     // Enhanced game statistics with Balatro styling
@@ -49,24 +49,42 @@ public class GamePanel extends JPanel {
     private JButton musicToggleButton;
     private boolean musicMuted = false;
 
+    // Add restart button field
+    private JButton restartButton;
+
     public GamePanel(TicTacToeApp app) {
         initializeFonts();
         setupMainLayout();
         setupTopPanel(app);
         setupGameBoard(app);
+        setupBottomPanel(); // New method for the bottom panel
         setupStyling();
 
+        // Call resetGame to initialize the game state and timer
         resetGame();
+        // Ensure you have a valid path for your music file here
+        // As it's June 2025, you might be testing specific music files.
         playBackgroundMusic("path/to/your/music.wav");
     }
 
     private void initializeFonts() {
         try {
-            // Create custom fonts with fallback to system fonts
-            pixelFont = new Font("Monospaced", Font.BOLD, 14);
-            headerFont = new Font("Dialog", Font.BOLD, 16);
-            buttonFont = new Font("Dialog", Font.BOLD, 28);
-        } catch (Exception e) {
+            // Using system default fonts as placeholders for demonstration
+            // If you have custom font files, load them like this:
+            // pixelFont = Font.createFont(Font.TRUETYPE_FONT, new File("path/to/your/pixel_font.ttf")).deriveFont(14f);
+            // headerFont = Font.createFont(Font.TRUETYPE_FONT, new File("path/to/your/header_font.ttf")).deriveFont(16f);
+            // buttonFont = Font.createFont(Font.TRUETYPE_FONT, new File("path/to/your/button_font.ttf")).deriveFont(28f);
+            // GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            // ge.registerFont(pixelFont);
+            // ge.registerFont(headerFont);
+            // ge.registerFont(buttonFont);
+
+            // Fallback fonts
+            pixelFont = new Font(Font.MONOSPACED, Font.BOLD, 14);
+            headerFont = new Font(Font.DIALOG, Font.BOLD, 16);
+            buttonFont = new Font(Font.DIALOG, Font.BOLD, 28);
+        } catch (Exception e) { // Catching FontFormatException | IOException if loading from files
+            System.err.println("Error loading custom fonts (using fallback): " + e.getMessage());
             // Fallback fonts
             pixelFont = new Font(Font.MONOSPACED, Font.BOLD, 14);
             headerFont = new Font(Font.DIALOG, Font.BOLD, 16);
@@ -88,7 +106,7 @@ public class GamePanel extends JPanel {
         JPanel statsPanel = createStatsPanel();
         topPanel.add(statsPanel, BorderLayout.CENTER);
 
-        // Control buttons panel
+        // Control buttons panel (now only Home and Music)
         JPanel controlPanel = createControlPanel(app);
         topPanel.add(controlPanel, BorderLayout.EAST);
 
@@ -99,15 +117,15 @@ public class GamePanel extends JPanel {
         JPanel statsPanel = new JPanel(new GridLayout(1, 5, 8, 0));
         statsPanel.setBackground(BACKGROUND_DARK);
 
-        // Status card
+        // Status card - Initialized here, updated in resetGame
         statusLabel = createStatCard("X's Turn", NEON_BLUE);
         statsPanel.add(statusLabel);
 
-        // Timer card
+        // Timer card - Initialized here, updated in resetGame
         timerLabel = createStatCard("\u23F1 0s", NEON_GREEN);
         statsPanel.add(timerLabel);
 
-        // Spots taken card
+        // Spots taken card - Initialized here, updated in resetGame
         spotsTakenLabel = createStatCard("\u25A0 0/9", NEON_YELLOW);
         statsPanel.add(spotsTakenLabel);
 
@@ -141,7 +159,7 @@ public class GamePanel extends JPanel {
         JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
         controlPanel.setBackground(BACKGROUND_DARK);
 
-        // Home button with Balatro styling
+        // Home button
         JButton homeButton = createStyledButton("HOME", RETRO_PURPLE);
         homeButton.addActionListener(e -> {
             stopGameTimer();
@@ -157,6 +175,19 @@ public class GamePanel extends JPanel {
 
         return controlPanel;
     }
+
+    private void setupBottomPanel() {
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10)); // Centered, some vertical gap
+        bottomPanel.setBackground(BACKGROUND_DARK);
+
+        // Restart button - now in the bottom panel
+        restartButton = createStyledButton("RESTART GAME", NEON_GREEN); // Slightly more descriptive text
+        restartButton.addActionListener(e -> resetGame());
+        bottomPanel.add(restartButton);
+
+        add(bottomPanel, BorderLayout.SOUTH);
+    }
+
 
     private JButton createStyledButton(String text, Color accentColor) {
         JButton button = new JButton(text);
@@ -270,10 +301,10 @@ public class GamePanel extends JPanel {
     }
 
     private void startGameTimer() {
-        secondsElapsed = 0;
+        secondsElapsed = 0; // Ensure timer starts from 0 on game start/restart
         updateTimerDisplay();
         if (gameTimer != null) {
-            gameTimer.stop();
+            gameTimer.stop(); // Stop any existing timer
         }
         gameTimer = new Timer(1000, e -> {
             secondsElapsed++;
@@ -299,11 +330,11 @@ public class GamePanel extends JPanel {
             backgroundMusicClip = AudioSystem.getClip();
             backgroundMusicClip.open(audioStream);
             backgroundMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
-            musicToggleButton.setText("\u266A");
+            musicToggleButton.setText("\u266A"); // Music playing symbol
             musicMuted = false;
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             System.err.println("Synthwave beats unavailable: " + e.getMessage());
-            musicToggleButton.setEnabled(false);
+            musicToggleButton.setEnabled(false); // Disable button if music can't load
         }
     }
 
@@ -320,11 +351,11 @@ public class GamePanel extends JPanel {
         if (musicMuted) {
             backgroundMusicClip.start();
             backgroundMusicClip.loop(Clip.LOOP_CONTINUOUSLY);
-            musicToggleButton.setText("\u266A");
+            musicToggleButton.setText("\u266A"); // Music playing symbol
             musicMuted = false;
         } else {
             backgroundMusicClip.stop();
-            musicToggleButton.setText("\u266B");
+            musicToggleButton.setText("\u266B"); // Music muted symbol
             musicMuted = true;
         }
     }
@@ -451,31 +482,35 @@ public class GamePanel extends JPanel {
         for (JButton[] row : buttons) {
             for (JButton btn : row) {
                 btn.setEnabled(false);
-                if (!btn.getText().isEmpty()) {
-                    btn.setBackground(CARD_BACKGROUND.darker());
-                }
             }
         }
     }
 
     public void resetGame() {
+        // Reset board buttons to initial state
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 buttons[i][j].setText("");
                 buttons[i][j].setEnabled(true);
                 buttons[i][j].setBackground(CARD_BACKGROUND);
-                buttons[i][j].setForeground(PIXEL_WHITE);
+                buttons[i][j].setForeground(PIXEL_WHITE); // Default text color
                 buttons[i][j].setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(RETRO_PURPLE, 2),
                         BorderFactory.createEmptyBorder(10, 10, 10, 10)
                 ));
             }
         }
+        // Reset game state variables
         playerX = true;
+        spotsTaken = 0;
+
+        // Update display labels
         statusLabel.setText("X's Turn");
         statusLabel.setForeground(NEON_BLUE);
-        spotsTaken = 0;
         spotsTakenLabel.setText("\u25A0 0/9");
-        startGameTimer();
+
+        // Reset timer
+        stopGameTimer(); // Stop any currently running timer
+        startGameTimer(); // Start a fresh timer from 0
     }
 }

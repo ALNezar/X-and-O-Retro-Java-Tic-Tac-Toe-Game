@@ -114,13 +114,11 @@ public class WelcomePanel extends JPanel {
         gbc.insets = new Insets(0, 0, 15, 0); // Margin below the button
         buttonPanel.add(playButton, gbc);
 
-        // Settings Button (Example, can be implemented later)
+        // Settings Button
         JButton settingsButton = createStyledButton("SETTINGS", RETRO_PURPLE);
         settingsButton.addActionListener(e -> {
             stopAnimation();
-            // Assuming you have a settings screen:
-            // app.showScreen("Settings");
-            JOptionPane.showMessageDialog(this, "Settings not implemented yet!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            app.showScreen("Settings");
         });
 
         gbc.gridy = 1;
