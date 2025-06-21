@@ -23,7 +23,7 @@
   ![image](https://github.com/user-attachments/assets/5fa3e9c2-3772-4a00-ba08-d37c1f3e3dca)
 
 ## Restart the game or go back to the menu any time
-![image](https://github.com/user-attachments/assets/37a95495-bc5a-457d-83b2-2a67d54d26bc)
+![image](https://github.com/user-attachments/assets/d22da913-8151-45a0-9476-8cdb2fd9e20b)
 
 ---
 
