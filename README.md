@@ -29,11 +29,6 @@
 
 ## How to Play! ![image](https://github.com/user-attachments/assets/a15763c7-6eb1-440b-a854-bc08fed12555)
 
-
-
-
-## How to Play
-
 1.  **Download or clone this project:**
     ```sh
     git clone [https://github.com/ALNezar/X-and-O.git](https://github.com/ALNezar/X-and-O.git)
