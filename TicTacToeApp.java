@@ -16,7 +16,7 @@ public class TicTacToeApp extends JFrame {
 
     private void initUI() {
         setTitle("Tic-Tac-Toe");
-        setSize(600, 600);
+        setSize(800, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 

@@ -1,41 +1,82 @@
 # X-and-O (Tic-Tac-Toe)
 
-A simple and fun Tic-Tac-Toe game made in Java!  
-You can play against the computer or another person.  
-The game has a cool retro look with bright colors and easy menus.
+![image](https://github.com/user-attachments/assets/57e8cc7d-fe04-45cf-9871-7d7937815d4f)
 
-## Features
+>Goooood old Tic-Tac-Toe game made in Java!  ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧
 
-- Play with a friend or against the computer
-- Choose the board size (3x3 up to 6x6)
-- Colorful, modern design
-- See who’s winning and how much time has passed
-- Change settings like board size, game mode, and music
-- Restart the game or go back to the menu any time
+>You can play against the computer or another person.
 
-## How to Play
+>The game has a cool retro look with bright colors and easy menus.
 
-1. **Download or clone this project:**
+
+# Features
+
+## Play with a friend or against the computer
+![image](https://github.com/user-attachments/assets/c27a0a5a-2df7-4fbf-b749-1c7d085b7563)
+
+
+## Choose the board size (3x3 up to 6x6)
+![image](https://github.com/user-attachments/assets/1e89443e-0367-42fc-8ae8-a02a6161c946)
+
+  
+## See who’s winning and how much time has passed
+  ![image](https://github.com/user-attachments/assets/5fa3e9c2-3772-4a00-ba08-d37c1f3e3dca)
+
+## Restart the game or go back to the menu any time
+![image](https://github.com/user-attachments/assets/37a95495-bc5a-457d-83b2-2a67d54d26bc)
+
+---
+
+## How to Play! ![image](https://github.com/user-attachments/assets/a15763c7-6eb1-440b-a854-bc08fed12555)
+
+1.  **Download or clone this project:**
     ```sh
-    git clone https://github.com/ALNezar/X-and-O.git
+    git clone [https://github.com/ALNezar/X-and-O.git](https://github.com/ALNezar/X-and-O.git)
     cd X-and-O
     ```
 
-2. **Run the game:**
-    - If you use an IDE (like IntelliJ or Eclipse), open the project and run `TicTacToeApp.java`.
-    - If you use the command line:
-      ```sh
-      javac *.java
-      java TicTacToeApp
-      ```
+2.  **Run the game:**
+    * **If you use an IDE (like IntelliJ IDEA or Eclipse):**
+        Open the project and run `Main.java` directly. The IDE will automatically handle the necessary dependencies.
+    * **If you use the command line:**
+        You need to include the SQLite JDBC driver (`sqlite-jdbc-3.27.2.1.jar`) in your classpath.
+
+        **For Windows:**
+        ```sh
+        # Compile all Java files, including the JDBC driver in the classpath
+        javac -cp ".;sqlite-jdbc-3.27.2.1.jar" *.java
+
+        # Run the main application
+        java -cp ".;sqlite-jdbc-3.27.2.1.jar" Main
+        ```
+        **For macOS/Linux:**
+        ```sh
+        # Compile all Java files, including the JDBC driver in the classpath
+        javac -cp ".:sqlite-jdbc-3.27.2.1.jar" *.java
+
+        # Run the main application
+        java -cp ".:sqlite-jdbc-3.27.2.1.jar" Main
+        ```
 
 ## Files in This Project
 
-- `TicTacToeApp.java` — starts the game
-- `GamePanel.java` — the main game screen
-- `WelcomePanel.java` — welcome and main menu
-- `SettingsPanel.java` — change game settings
-- `Settings.java` — saves your settings
+* `Main.java` — run de game!docs(readme): Update installation and project structure details
+* `TicTacToeApp.java` — Manages the overall app and screens.
+* `GamePanel.java` — The main game screen.
+* `WelcomePanel.java` — The welcome and main menu.
+* `SettingsPanel.java` — Handles game settings.
+* `Settings.java` — Stores game settings in memory.
+* `resources/` — Contains game assets like audio files (`.wav`).
+* `sqlite-jdbc-3.27.2.1.jar` — The JDBC driver for SQLite database operations.
+* `settings.db` — The SQLite database file (for persistent settings).
+
+---
+
+## Credits
+
+🎵 **Soundtrack by [TigerOffbtk](https://www.youtube.com/channel/UC58Ar0632X6zpvv7on1Kjkg)**  
+Big thanks for creating the awesome soundtrack :)
+---
 
 ## License
 
