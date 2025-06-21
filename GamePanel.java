@@ -201,9 +201,6 @@ public class GamePanel extends JPanel {
 
         JButton homeButton = createStyledButton("HOME", RETRO_PURPLE);
         homeButton.addActionListener(e -> {
-            stopGameTimer();
-            stopMusic();
-            closeGamePanelAudio();
             app.showScreen("Welcome");
         });
         controlPanel.add(homeButton);
