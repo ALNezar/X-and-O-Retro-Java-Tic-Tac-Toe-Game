@@ -70,12 +70,14 @@
 * `sqlite-jdbc-3.27.2.1.jar` — The JDBC driver for SQLite database operations.
 * `settings.db` — The SQLite database file (for persistent settings).
 
-## License
-
-This project is open source and free to use.
-
 ---
-Made by [ALNezar](https://github.com/ALNezar)
+
+## Credits
+
+🎵 **Soundtrack by [TigerOffbtk](https://www.youtube.com/channel/UC58Ar0632X6zpvv7on1Kjkg)**  
+Big thanks for creating the awesome soundtrack :)
+---
+
 ## License
 
 This project is open source and free to use.
