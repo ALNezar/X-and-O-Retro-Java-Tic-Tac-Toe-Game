@@ -8,6 +8,7 @@
 
 >The game has a cool retro look with bright colors and easy menus.
 
+> music and sound effects!!!
 
 # Features
 
