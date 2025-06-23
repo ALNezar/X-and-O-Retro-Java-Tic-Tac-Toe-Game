@@ -65,6 +65,7 @@ public class GamePanel extends JPanel {
 
         resetGame();
         playBackgroundMusic("resources/music.wav");
+
     }
 
     private void initializeFonts() {
