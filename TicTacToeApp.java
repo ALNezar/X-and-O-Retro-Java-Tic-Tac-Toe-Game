@@ -3,7 +3,6 @@ import java.awt.*;
 import java.net.URL; // Added import for URL
 import javax.sound.sampled.*;
 import java.io.*;
-
 public class TicTacToeApp extends JFrame {
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel mainPanel = new JPanel(cardLayout);
