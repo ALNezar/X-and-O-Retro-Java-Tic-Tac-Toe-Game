@@ -1,6 +1,6 @@
 # X-and-O (Tic-Tac-Toe)
 
-![image](https://github.com/user-attachments/assets/57e8cc7d-fe04-45cf-9871-7d7937815d4f)
+![image](https://github.com/user-attachments/assets/4c9ecadf-3cd6-411f-a3c7-09d1e440c089)
 
 >Goooood old Tic-Tac-Toe game made in Java!  ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧
 
