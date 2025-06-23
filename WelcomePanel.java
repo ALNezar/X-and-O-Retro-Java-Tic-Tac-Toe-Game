@@ -180,7 +180,7 @@ public class WelcomePanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Play Button
-        JButton playButton = createStyledButton("PLAY GAME", NEON_PINK);
+        JButton playButton = createStyledButton("PLAY GAME ▶", NEON_PINK);
         playButton.addActionListener(e -> {
             // Play click sound when button is activated
             if (clickSoundClip != null) {
@@ -197,7 +197,7 @@ public class WelcomePanel extends JPanel {
         buttonPanel.add(playButton, gbc);
 
         // Settings Button
-        JButton settingsButton = createStyledButton("SETTINGS", RETRO_PURPLE);
+        JButton settingsButton = createStyledButton("SETTINGS ⚙\uFE0F", RETRO_PURPLE);
         settingsButton.addActionListener(e -> {
             // Play click sound when button is activated
             if (clickSoundClip != null) {
