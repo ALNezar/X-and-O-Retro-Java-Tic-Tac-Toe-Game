@@ -28,23 +28,23 @@
 
 ---
 
-## How to Play! ![image](https://github.com/user-attachments/assets/a15763c7-6eb1-440b-a854-bc08fed12555)
+# How to Play! ![image](https://github.com/user-attachments/assets/a15763c7-6eb1-440b-a854-bc08fed12555)
 
 
-## JUST CLICK THE  Tic-tac-toe.JAR ![image](https://github.com/user-attachments/assets/a15763c7-6eb1-440b-a854-bc08fed12555)
+# JUST CLICK THE  Tic-tac-toe.JAR or Tic-tac-toe.EXE ![image](https://github.com/user-attachments/assets/a15763c7-6eb1-440b-a854-bc08fed12555)
 
-1.  **JUST CLICK THE  Tic-tac-toe.JAR !**
+1.  **JUST CLICK THE  Tic-tac-toe.JAR !** OR 1.
+
+     **JUST CLICK THE  Tic-tac-toe.EXE !**
+
    
-
-## How to Play! ![image](https://github.com/user-attachments/assets/a15763c7-6eb1-440b-a854-bc08fed12555)
-
-1.  **Download or clone this project:**
+3.  **Download or clone this project:**
     ```sh
     git clone [https://github.com/ALNezar/X-and-O.git](https://github.com/ALNezar/X-and-O.git)
     cd X-and-O
     ```
 
-2.  **Run the game:**
+4.  **Run the game:**
     * **If you use an IDE (like IntelliJ IDEA or Eclipse):**
         Open the project and run `Main.java` directly. The IDE will automatically handle the necessary dependencies.
     * **If you use the command line:**
