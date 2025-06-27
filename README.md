@@ -2,13 +2,14 @@
 
 ![image](https://github.com/user-attachments/assets/4c9ecadf-3cd6-411f-a3c7-09d1e440c089)
 
->Goooood old Tic-Tac-Toe game made in Java!  ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧
+# Goooood old Tic-Tac-Toe game made in Java! ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧
+# You can play against the computer 🤖or another person. 
 
->You can play against the computer or another person.
+# The game has a Kool retro look with bright colors and easy menus.
+#  	ENJOY ! :P
 
->The game has a cool retro look with bright colors and easy menus.
 
-> music and sound effects!!!
+music and sound effects!!!
 
 # Features
 
